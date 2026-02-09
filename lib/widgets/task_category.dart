@@ -3,9 +3,17 @@ import 'package:flutter_svg/svg.dart';
 import 'package:todo_app/pages/index/sheets/add_category.dart';
 import 'package:todo_app/widgets/primary_button.dart';
 
-class GiveCategory extends StatelessWidget {
+class GiveCategory extends StatefulWidget {
   GiveCategory({super.key});
 
+  @override
+  State<GiveCategory> createState() => _GiveCategoryState();
+}
+
+String category = ' ';
+Color categoryBackgroundColor2 = Colors.white;
+
+class _GiveCategoryState extends State<GiveCategory> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -36,57 +44,57 @@ class GiveCategory extends StatelessWidget {
                 runSpacing: 42,
                 children: [
                   CategoryAdd(
-                    backgroundColor: Color(0xffCCFF80),
-                    svgAsset: 'bread1',
+                    categoryBackgroundColor: Color(0xffCCFF80),
+                    svgAsset: 'Grocery',
                     categoryName: 'Grocery',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xffFF9680),
-                    svgAsset: 'briefcase1',
+                    categoryBackgroundColor: Color(0xffFF9680),
+                    svgAsset: 'Work',
                     categoryName: 'Work',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff80FFFF),
-                    svgAsset: 'sport1',
+                    categoryBackgroundColor: Color(0xff80FFFF),
+                    svgAsset: 'Sport',
                     categoryName: 'Sport',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff80FFD9),
-                    svgAsset: 'design',
+                    categoryBackgroundColor: Color(0xff80FFD9),
+                    svgAsset: 'Design',
                     categoryName: 'Design',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff809CFF),
-                    svgAsset: 'mortarboard1',
+                    categoryBackgroundColor: Color(0xff809CFF),
+                    svgAsset: 'University',
                     categoryName: 'University',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xffFF80EB),
-                    svgAsset: 'megaphone1',
+                    categoryBackgroundColor: Color(0xffFF80EB),
+                    svgAsset: 'Social',
                     categoryName: 'Social',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xffFC80FF),
-                    svgAsset: 'music1',
+                    categoryBackgroundColor: Color(0xffFC80FF),
+                    svgAsset: 'Music',
                     categoryName: 'Music',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff80FFA3),
-                    svgAsset: 'heartbeat1',
+                    categoryBackgroundColor: Color(0xff80FFA3),
+                    svgAsset: 'Health',
                     categoryName: 'Health',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff80D1FF),
-                    svgAsset: 'videocamrea1',
+                    categoryBackgroundColor: Color(0xff80D1FF),
+                    svgAsset: 'Video',
                     categoryName: 'Video',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xffFFCC80),
-                    svgAsset: 'home1',
+                    categoryBackgroundColor: Color(0xffFFCC80),
+                    svgAsset: 'Home',
                     categoryName: 'Home',
                   ),
                   CategoryAdd(
-                    backgroundColor: Color(0xff80FFD1),
+                    categoryBackgroundColor: Color(0xff80FFD1),
                     svgAsset: 'add1',
                     categoryName: 'Create New',
                     onPressed: () {
@@ -123,14 +131,14 @@ class GiveCategory extends StatelessWidget {
 }
 
 class CategoryAdd extends StatelessWidget {
-  final Color backgroundColor;
+  final Color categoryBackgroundColor;
   final String svgAsset;
   final String categoryName;
   final VoidCallback? onPressed;
 
   const CategoryAdd({
     super.key,
-    required this.backgroundColor,
+    required this.categoryBackgroundColor,
     required this.svgAsset,
     required this.categoryName,
     this.onPressed,
@@ -141,12 +149,15 @@ class CategoryAdd extends StatelessWidget {
     return Column(
       children: [
         IconButton(
-          onPressed: () => onPressed?.call(),
+          onPressed: () {
+            category = categoryName;
+            categoryBackgroundColor2 = categoryBackgroundColor;
+          },
           padding: EdgeInsets.all(0),
           icon: Container(
             padding: EdgeInsets.all(18),
             decoration: BoxDecoration(
-              color: backgroundColor,
+              color: categoryBackgroundColor,
               shape: BoxShape.rectangle,
               borderRadius: BorderRadius.circular(4),
             ),

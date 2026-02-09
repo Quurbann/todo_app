@@ -8,12 +8,14 @@ class PrimaryTextField extends StatefulWidget {
   final Color? hintColor;
   final Color? enabledBorderColor;
 
-  PrimaryTextField({
+  const PrimaryTextField({
+    super.key,
     required this.labelName,
     required this.hintText,
     required this.obscureText,
     this.letterSpacing,
-    super.key, this.hintColor, this.enabledBorderColor,
+    this.hintColor,
+    this.enabledBorderColor,
   });
 
   @override
@@ -24,7 +26,7 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           widget.labelName,
@@ -34,27 +36,29 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
             color: Colors.white.withValues(alpha: 0.87),
           ),
         ),
-        SizedBox(height: 16),
+        const SizedBox(height: 16),
         TextField(
           cursorColor: Colors.white,
           obscureText: widget.obscureText,
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
           decoration: InputDecoration(
             hintText: widget.hintText,
             hintStyle: TextStyle(
-              color: widget.hintColor ??  Color(0xff535353),
+              color: widget.hintColor ?? const Color(0xff535353),
               letterSpacing: widget.letterSpacing,
             ),
-            contentPadding: EdgeInsets.all(12),
+            contentPadding: const EdgeInsets.all(12),
             filled: true,
-            fillColor: Color(0xff1D1D1D),
+            fillColor: const Color(0xff1D1D1D),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: Color(0xff979797)),
+              borderSide: const BorderSide(color: Color(0xff979797)),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(color: widget.enabledBorderColor ??  Colors.transparent),
+              borderSide: BorderSide(
+                color: widget.enabledBorderColor ?? Colors.transparent,
+              ),
             ),
           ),
         ),
@@ -64,24 +68,30 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
 }
 
 class SecondaryTextField extends StatelessWidget {
-
   final String hintText;
   final bool autofocus;
+  final TextEditingController? controller;
 
-
-  const SecondaryTextField({super.key, required this.hintText, required this.autofocus});
+  const SecondaryTextField({
+    super.key,
+    required this.hintText,
+    required this.autofocus,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      style: TextStyle(color: Colors.white),
+      controller: controller,
+      style: const TextStyle(color: Colors.white),
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: TextStyle(color: Colors.grey),
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        hintStyle: const TextStyle(color: Colors.grey),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(4),
-          borderSide: BorderSide(color: Color(0xff979797), width: 1),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Color(0xff979797), width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),

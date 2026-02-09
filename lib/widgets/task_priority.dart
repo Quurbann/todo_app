@@ -9,8 +9,9 @@ class TaskPriority extends StatefulWidget {
   State<TaskPriority> createState() => _TaskPriorityState();
 }
 
-class _TaskPriorityState extends State<TaskPriority> {
   int? selectedPriority;
+
+class _TaskPriorityState extends State<TaskPriority> {
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +123,7 @@ class PriorityField extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               priorityLevel,
-              style: const TextStyle(color: Colors.white, fontSize: 16),
+              style: TextStyle(color: Colors.white, fontSize: 16),
             ),
           ],
         ),
