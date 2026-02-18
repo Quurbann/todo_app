@@ -23,7 +23,7 @@ class PrimaryButton extends StatelessWidget {
       child: Text(
         text,
         style: TextStyle(
-          color: textColor ??  Colors.white.withValues(alpha: 0.5),
+          color: textColor ??  Colors.white,
           fontSize: 16,
           fontWeight: FontWeight.w400,
         ),

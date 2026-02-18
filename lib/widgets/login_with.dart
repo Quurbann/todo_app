@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:todo_app/pages/login/login.dart';
+import 'package:todo_app/pages/index/home.dart';
 
 class LoginWith extends StatelessWidget {
 
@@ -19,7 +19,7 @@ class LoginWith extends StatelessWidget {
       children: [
         Expanded(
           child: OutlinedButton(
-            onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => LoginPage())),
+            onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage())),
             style: OutlinedButton.styleFrom(
               side: BorderSide(color: Color(0xff8875FF)),
               padding: EdgeInsets.symmetric(vertical: 12),

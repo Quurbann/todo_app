@@ -1,40 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:todo_app/providers/add_task_provider.dart';
 import 'package:todo_app/widgets/task_category.dart';
 import 'package:todo_app/widgets/task_priority.dart';
 import 'package:todo_app/widgets/text_fields.dart';
 
-
 void addGivePriority(BuildContext context) {
+  final provider = context.read<AddTaskProvider>();
+
   showDialog(
     context: context,
     barrierDismissible: true,
     builder: (context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(1),
+      return ChangeNotifierProvider.value(
+        value: provider,
+        child: Dialog(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(1)),
+            child: TaskPriority(),
         ),
-        child: TaskPriority(),
       );
     },
   );
 }
 
 void addGiveCategory(BuildContext context) {
+  final provider = context.read<AddTaskProvider>();
+
   showDialog(
     context: context,
-    barrierDismissible: true,
-    builder: (context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(1),
+    builder: (_) {
+      return ChangeNotifierProvider.value(
+        value: provider,
+        child: Dialog(
+          child: GiveCategory(),
         ),
-        child: GiveCategory(),
       );
     },
   );
 }
+
 
 Future<DateTime?> chooseDate(BuildContext context) async {
   return await showDatePicker(
@@ -57,33 +63,22 @@ Future<DateTime?> chooseDate(BuildContext context) async {
   );
 }
 
-class AddTask extends StatefulWidget {
-  @override
-  State<AddTask> createState() => _AddTaskState();
+Future<void> saveTodo(
+  String title,
+  String description,
+  String category,
+  String priority,
+  int categoryColor,
+) async {
+  final prefs = await SharedPreferences.getInstance();
+  List<String> tasks = prefs.getStringList('tasks') ?? [];
+
+  tasks.add('$title|$description|$category|$priority|$categoryColor');
+
+  await prefs.setStringList('tasks', tasks);
 }
 
-class _AddTaskState extends State<AddTask> {
-  final TextEditingController taskController = TextEditingController();
-  final TextEditingController descController = TextEditingController();
-
-  Future<void> saveTodo() async {
-    final prefs = await SharedPreferences.getInstance();
-    List<String> tasks = prefs.getStringList('tasks') ?? [];
-
-    tasks.add(
-      '${taskController.text}|${descController.text}|$category|$selectedPriority|$categoryBackgroundColor2',
-    );
-
-    await prefs.setStringList('tasks', tasks);
-  }
-
-  @override
-  void dispose() {
-    taskController.dispose();
-    descController.dispose();
-    super.dispose();
-  }
-
+class AddTask extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -114,15 +109,17 @@ class _AddTaskState extends State<AddTask> {
           SecondaryTextField(
             hintText: 'Task',
             autofocus: true,
-            controller: taskController,
+            onChanged: (value) =>
+                context.read<AddTaskProvider>().setTitle(value),
           ),
 
           const SizedBox(height: 12),
 
           SecondaryTextField(
             hintText: 'Description',
-            autofocus: true,
-            controller: descController,
+            autofocus: false,
+            onChanged: (value) =>
+                context.read<AddTaskProvider>().setDescription(value),
           ),
 
           const SizedBox(height: 20),
@@ -154,8 +151,19 @@ class _AddTaskState extends State<AddTask> {
               ),
               IconButton(
                 onPressed: () async {
-                  if (taskController.text.trim().isEmpty) return;
-                  await saveTodo();
+                  final provider = context.read<AddTaskProvider>();
+
+                  if (provider.title.trim().isEmpty) return;
+
+                  await saveTodo(
+                    provider.title,
+                    provider.description,
+                    provider.categoryName,
+                    provider.selectedPriority,
+                    provider.categoryBGColor.value,
+                  );
+
+                  provider.clear();
                   Navigator.pop(context);
                 },
                 icon: SvgPicture.asset(

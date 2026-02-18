@@ -10,6 +10,7 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
+
   PageController topPageController = PageController();
   PageController bottomPageController = PageController();
 

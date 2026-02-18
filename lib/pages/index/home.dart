@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:provider/provider.dart';
 import 'package:todo_app/pages/index/sheets/add_task.dart';
+import 'package:todo_app/providers/add_task_provider.dart';
+import 'package:todo_app/providers/home_provider.dart';
 import 'package:todo_app/widgets/task_interface.dart';
 
 void showAddTaskSheet(BuildContext context, VoidCallback onClose) async {
@@ -10,40 +12,24 @@ void showAddTaskSheet(BuildContext context, VoidCallback onClose) async {
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (context) {
-      return AddTask();
+      return ChangeNotifierProvider(
+        create: (BuildContext context) => AddTaskProvider(),
+        child: AddTask(),
+      );
     },
   );
 
   onClose();
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  int _index = 0;
-  List<String> tasks = [];
-
-  @override
-  void initState() {
-    super.initState();
-    loadTodos();
-  }
-
-  Future<void> loadTodos() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      tasks = prefs.getStringList('tasks') ?? [];
-    });
-  }
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
 
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
+    final provider = context.watch<HomeProvider>();
+    final tasks = provider.tasks;
 
     return Scaffold(
       appBar: AppBar(
@@ -77,7 +63,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-
+      // Selector use,
       body: tasks.isEmpty
           ? Center(
               child: Column(
@@ -106,11 +92,12 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             )
-
           : TaskInterface(tasks: tasks),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => showAddTaskSheet(context, loadTodos),
+        onPressed: () async {
+          showAddTaskSheet(context, () => provider.loadTodos());
+        },
         backgroundColor: const Color(0xff8687E7),
         shape: const CircleBorder(),
         child: const Icon(Icons.add, color: Colors.white),
@@ -122,25 +109,19 @@ class _HomePageState extends State<HomePage> {
           highlightColor: Colors.transparent,
         ),
         child: BottomNavigationBar(
-          currentIndex: _index,
-          onTap: (i) => setState(() => _index = i),
+          currentIndex: provider.currentIndex,
+          onTap: (i) => context.read<HomeProvider>().changeIndex(i),
           items: [
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/svg/bottom-navbar/home-2.svg',
-              ),
+              icon: SvgPicture.asset('assets/svg/bottom-navbar/home-2.svg'),
               label: 'Index',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/svg/bottom-navbar/calendar.svg',
-              ),
+              icon: SvgPicture.asset('assets/svg/bottom-navbar/calendar.svg'),
               label: 'Calendar',
             ),
             BottomNavigationBarItem(
-              icon: SvgPicture.asset(
-                'assets/svg/bottom-navbar/user.svg',
-              ),
+              icon: SvgPicture.asset('assets/svg/bottom-navbar/user.svg'),
               label: 'Profile',
             ),
           ],
@@ -149,5 +130,3 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
-
-

@@ -70,25 +70,27 @@ class _PrimaryTextFieldState extends State<PrimaryTextField> {
 class SecondaryTextField extends StatelessWidget {
   final String hintText;
   final bool autofocus;
+  final ValueChanged<String>? onChanged;
   final TextEditingController? controller;
 
   const SecondaryTextField({
     super.key,
     required this.hintText,
     required this.autofocus,
+    this.onChanged,
     this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
-      controller: controller,
       style: const TextStyle(color: Colors.white),
+      controller: controller,
+      onChanged: onChanged,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.grey),
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Color(0xff979797), width: 1),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:todo_app/pages/index/home.dart';
 import 'package:todo_app/pages/register/sign_up.dart';
 import 'package:todo_app/widgets/primary_button.dart';
@@ -13,6 +14,19 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+
+  @override
+void initState() {
+  super.initState();
+  saveLoginSeen();
+}
+
+Future<void> saveLoginSeen() async {
+  final prefs = await SharedPreferences.getInstance();
+  await prefs.setBool('hasSeenLogin', true);
+}
+
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

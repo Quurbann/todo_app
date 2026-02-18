@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: Color(0xff121212),
         appBarTheme: AppBarTheme(
           backgroundColor: Color(0xff121212),
+          shadowColor: Colors.transparent,
           elevation: 0,
         ),
         textSelectionTheme: TextSelectionThemeData(

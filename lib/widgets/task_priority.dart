@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
+import 'package:todo_app/providers/add_task_provider.dart';
 import 'package:todo_app/widgets/primary_button.dart';
 
-class TaskPriority extends StatefulWidget {
-  const TaskPriority({super.key});
-
-  @override
-  State<TaskPriority> createState() => _TaskPriorityState();
-}
-
-  int? selectedPriority;
-
-class _TaskPriorityState extends State<TaskPriority> {
+class TaskPriority extends StatelessWidget {
+  TaskPriority({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final provider = context.watch<AddTaskProvider>();
+    final currentPriority =
+        provider.selectedPriority.isNotEmpty ? int.tryParse(provider.selectedPriority) : null;
+
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xff363636),
@@ -44,11 +42,9 @@ class _TaskPriorityState extends State<TaskPriority> {
               final priority = index + 1;
               return PriorityField(
                 priorityLevel: priority.toString(),
-                isSelected: selectedPriority == priority,
+                isSelected: currentPriority == priority,
                 onTap: () {
-                  setState(() {
-                    selectedPriority = priority;
-                  });
+                  provider.setPriority(priority.toString());
                 },
               );
             }),
@@ -73,7 +69,7 @@ class _TaskPriorityState extends State<TaskPriority> {
                   backgroundColor: const Color(0xff8687E7),
                   textColor: Colors.white,
                   onPressed: () {
-                    Navigator.pop(context, selectedPriority);
+                    Navigator.pop(context, provider.selectedPriority);
                   },
                 ),
               ),
@@ -123,7 +119,7 @@ class PriorityField extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               priorityLevel,
-              style: TextStyle(color: Colors.white, fontSize: 16),
+              style: const TextStyle(color: Colors.white, fontSize: 16),
             ),
           ],
         ),
